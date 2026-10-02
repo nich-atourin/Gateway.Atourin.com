@@ -1,0 +1,12 @@
+{
+  "name": "atourin-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Atourin Event Gateway — link-in-bio page + admin panel (Vercel)",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@upstash/redis": "^1.34.0",
+    "@vercel/blob": "^1.0.0"
+  }
+}
