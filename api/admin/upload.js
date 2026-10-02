@@ -25,8 +25,10 @@ export default route({
     if (!kind) throw new HttpError(415, 'File harus berupa gambar PNG, JPG, WEBP atau GIF');
     const name = `${Date.now()}-${crypto.randomBytes(5).toString('hex')}.${kind.ext}`;
 
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.GWPUBLIC_READ_WRITE_TOKEN;
+    if (token) {
       const blob = await put(`atourin/${name}`, buf, {
+        token,
         access: 'public',
         contentType: kind.type,
         addRandomSuffix: false,
