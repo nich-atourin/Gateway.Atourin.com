@@ -2,6 +2,7 @@ import { route, json, readJson, HttpError } from '../../lib/http.js';
 import { requireAuth } from '../../lib/auth.js';
 import { getConfig, saveConfig } from '../../lib/store.js';
 import { sanitizeConfig } from '../../lib/validate.js';
+import { deleteUnusedImages } from '../../lib/blob.js';
 
 export default route({
   // Full config (including inactive items) for the admin panel
@@ -20,6 +21,8 @@ export default route({
     const clean = sanitizeConfig(body.config, current);
     const next = { ...clean, rev: current.rev + 1, updatedAt: new Date().toISOString() };
     await saveConfig(next);
+    // Only after the new config is safely stored: remove images nothing references anymore.
+    await deleteUnusedImages(current, next);
     json(res, 200, next);
   },
 });
